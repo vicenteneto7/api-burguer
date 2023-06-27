@@ -56,7 +56,6 @@ app.put('/order/:id', checkUserId, (request, response) => {
 
     orders[index] = orderUpdate
 
-
     return response.status(201).json(orderUpdate)
 
 })
@@ -71,6 +70,15 @@ app.delete('/order/:id', checkUserId, (request, response) => {
 
 
     return response.status(201).json(orderDelete)
+
+})
+
+app.patch('/order/:id', checkUserId,(request, response) => {
+    const index = request.userIndex
+
+    orders[index].status = "Pronto"
+
+    return response.status(201).json(orders[index])
 
 })
 
