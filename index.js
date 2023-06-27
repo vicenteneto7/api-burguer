@@ -29,6 +29,13 @@ app.get('/order', (request, response) => {
 
 })
 
+app.get('/order/:id', checkUserId,(request, response) => {
+    const index = request.userIndex
+
+    return response.status(201).json(orders[index])
+
+})
+
 
 app.post('/order', (request, response) => {
     const { order, clientName, price } = request.body
