@@ -54,6 +54,19 @@ app.put('/order/:id', checkUserId, (request, response) => {
 
 })
 
+app.delete('/order/:id', checkUserId, (request, response) => {
+    const index = request.userIndex
+    const id = request.userId
+
+    const orderDelete = { id }
+
+    orders.splice(index, 1)
+
+
+    return response.status(201).json(orderDelete)
+
+})
+
 
 
 
