@@ -1,4 +1,3 @@
-const { response } = require('express')
 const express = require('express')
 const uuid = require('uuid')
 const port = 3000
@@ -21,21 +20,17 @@ const checkUserId = (request, response, next) => {
     request.userId = id
 
     next()
-
 }
 
 app.get('/order', (request, response) => {
     return response.status(201).json(orders)
-
 })
 
-app.get('/order/:id', checkUserId,(request, response) => {
+app.get('/order/:id', checkUserId, (request, response) => {
     const index = request.userIndex
 
     return response.status(201).json(orders[index])
-
 })
-
 
 app.post('/order', (request, response) => {
     const { order, clientName, price } = request.body
@@ -44,20 +39,18 @@ app.post('/order', (request, response) => {
     orders.push(orderPlaced)
 
     return response.status(201).json(orderPlaced)
-
 })
 
 app.put('/order/:id', checkUserId, (request, response) => {
     const index = request.userIndex
     const id = request.userId
-    const { clientName ,order, price } = request.body
+    const { clientName, order, price } = request.body
 
     const orderUpdate = { id, order, clientName, price, status: "Em preparação" }
 
     orders[index] = orderUpdate
 
     return response.status(201).json(orderUpdate)
-
 })
 
 app.delete('/order/:id', checkUserId, (request, response) => {
@@ -73,17 +66,13 @@ app.delete('/order/:id', checkUserId, (request, response) => {
 
 })
 
-app.patch('/order/:id', checkUserId,(request, response) => {
+app.patch('/order/:id', checkUserId, (request, response) => {
     const index = request.userIndex
 
     orders[index].status = "Pronto"
 
     return response.status(201).json(orders[index])
-
 })
-
-
-
 
 app.listen(port, () => {
     console.log(`server started on ${port}`)
