@@ -8,7 +8,7 @@ app.use(express.json())
 const orders = []
 
 
-const checkUserId = (request, response, next) => {
+const checkId = (request, response, next) => {
     const { id } = request.params
     const index = orders.findIndex(order => order.id === id)
 
@@ -22,17 +22,24 @@ const checkUserId = (request, response, next) => {
     next()
 }
 
-app.get('/order', (request, response) => {
+const checkMethod = (request, response, next) => {
+    console.log(request.method, request.url)
+
+    next()
+}
+
+
+app.get('/order', checkMethod, (request, response) => {
     return response.status(201).json(orders)
 })
 
-app.get('/order/:id', checkUserId, (request, response) => {
+app.get('/order/:id', checkId, checkMethod, (request, response) => {
     const index = request.userIndex
 
     return response.status(201).json(orders[index])
 })
 
-app.post('/order', (request, response) => {
+app.post('/order', checkMethod, (request, response) => {
     const { order, clientName, price } = request.body
     const orderPlaced = { id: uuid.v4(), order, clientName, price, status: "Em preparação" }
 
@@ -41,7 +48,7 @@ app.post('/order', (request, response) => {
     return response.status(201).json(orderPlaced)
 })
 
-app.put('/order/:id', checkUserId, (request, response) => {
+app.put('/order/:id', checkId, checkMethod, (request, response) => {
     const index = request.userIndex
     const id = request.userId
     const { clientName, order, price } = request.body
@@ -53,7 +60,7 @@ app.put('/order/:id', checkUserId, (request, response) => {
     return response.status(201).json(orderUpdate)
 })
 
-app.delete('/order/:id', checkUserId, (request, response) => {
+app.delete('/order/:id', checkId, checkMethod, (request, response) => {
     const index = request.userIndex
     const id = request.userId
 
@@ -66,7 +73,7 @@ app.delete('/order/:id', checkUserId, (request, response) => {
 
 })
 
-app.patch('/order/:id', checkUserId, (request, response) => {
+app.patch('/order/:id', checkId, checkMethod, (request, response) => {
     const index = request.userIndex
 
     orders[index].status = "Pronto"
